@@ -1,0 +1,76 @@
+﻿
+@{
+    ViewBag.Title = "Expander";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Expander</h2>
+
+
+<div ng-app="expanderModule" ng-controller="SomeController">
+    <div expander expander-title="點擊展開1">
+        {{text}}
+    </div>
+    
+    
+    <div expander expander-title="點擊展開2">
+        {{text}}
+    </div>
+    
+    
+    <div expander1 expander-title="點擊展開3" expander-text="123gogogo" expander-showme="false"></div>
+</div>
+
+
+<script>
+    var expanderModule = angular.module('expanderModule', []);
+    expanderModule.directive('expander', function () {
+        return {
+            restrict: 'A',
+            replace: false,
+            transclude: true,
+            scope: {
+                title: '@@expanderTitle'
+            },
+            template: '<div>'
+                     + '<div class="title" ng-click="toggle()">{{title}}</div>'
+                     + '<div class="body" ng-show="showMe" ng-transclude></div>'
+                     + '</div>',
+            link: function (scope, element, attrs) {
+                scope.showMe = false;
+                scope.toggle = function toggle() {
+                    scope.showMe = !scope.showMe;
+                };
+            }
+        };
+    }).directive('expander1', function () {
+        return {
+            restrict: 'A',
+            replace: false,
+            transclude: true,
+            scope: {
+                title: '@@expanderTitle',
+                text: '@@expanderText',
+                showMe: '@@expanderShowme'
+            },
+            template: '<div>{{info}}'
+                     + '<div class="title" ng-click="toggle()">{{title}}</div>'
+                     + '<div class="body" ng-show="showMe">{{text}}</div>'
+                     + '</div>',
+            link: function (scope, element, attrs) {
+                //scope.showMe = false;
+
+                scope.toggle = function toggle() {
+                    scope.showMe = !scope.showMe;
+                };
+            }
+        };
+    });
+    expanderModule.controller('SomeController', function($scope) {
+        $scope.text = '這裡是內部的內容。';
+    });
+
+</script>
+
+
+
