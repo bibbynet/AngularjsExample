@@ -14,5 +14,10 @@ namespace AngularjsExample.Controllers
         {
             return View();
         }
-	}
+
+        public ActionResult Priority()
+        {
+            return View();
+        }
+    }
 }

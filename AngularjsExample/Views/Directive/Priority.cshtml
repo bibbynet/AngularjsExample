@@ -1,0 +1,87 @@
+﻿@{
+    ViewBag.Title = "Priority";
+}
+
+<div ng-app="myApp">
+
+    <a href="#" ap-test1 ap-test10 ap-test20>priority 10</a>
+
+</div>
+
+
+
+<script>
+
+    var myApp = angular.module('myApp', []);
+
+
+    //angularjs 2.1 後
+    //檢查何時中斷從小的 priority (100 -> 0)
+    //執行 directive 從大的 priority (0 <- 100)
+
+    myApp
+        .directive('apTest1', ['$injector', function ($injector) {
+
+            return {
+                priority: 1,
+                terminal: false,
+                link: function (scope, element, attrs) {
+
+                    $(element).click(function () {
+                        console.log('priority 1');
+                    });
+                }
+            };
+        }])
+        .directive('apTest10', ['$injector', function ($injector) {
+
+            var $compile = $injector.get('$compile');
+
+            return {
+                priority: 10,
+                terminal: true,
+                link: function (scope, element, attrs) {
+
+                    $(element).click(function () {
+                        console.log('priority 10');
+                        console.log(attrs);
+
+                        //for (var p in attrs.$attr) {
+                        //    var v = attrs.$attr[p];
+                        //    var arr = v.split('-');
+                        //    if (arr.length == 0)
+                        //        continue;
+                        //}
+
+                        var html = '<div ' + attrs.$attr.apTest1 + ' ></div>';
+                        var view = $compile(html)(scope);
+                        $(view).click();
+
+                    });
+                }
+            };
+
+        }])
+        .directive('apTest20', ['$injector', function ($injector) {
+
+            return {
+                priority: 20,
+                terminal: false,
+                link: function (scope, element, attrs) {
+
+                    $(element).click(function () {
+                        console.log('priority 20');
+                    });
+                }
+            };
+        }])
+
+
+
+    ;
+
+
+
+
+
+</script>
